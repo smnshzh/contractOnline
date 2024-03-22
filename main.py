@@ -86,7 +86,7 @@ if file:
         termination_date = str(df_un['تاریخ ترک کار'].item())
         st.header("نمونه قرارداد كار")
         # Path to the HTML file
-        html_file_path = './contracts/empolye.html'
+        html_file_path = './empolye.html'
 
         # Read the contents of the HTML file
         with open(html_file_path, 'r', encoding='utf-8') as file:
