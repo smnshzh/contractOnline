@@ -1,6 +1,6 @@
 import streamlit as st  
 import pandas as pd
-from docx import Document
+
 st.markdown("""<style>body { direction: rtl; }</style>""", unsafe_allow_html=True)
 sample = pd.read_csv('person.csv')
 
@@ -32,11 +32,7 @@ file = st.file_uploader("Upload File", type=["xlsx", "xls"])
 
 
 
-# Function to save contract as a Word file
-def save_as_word(contract_text):
-    doc = Document()
-    doc.add_paragraph(contract_text)
-    doc.save("contract.docx")
+
 
 if file:
     df = pd.read_excel(file)
@@ -158,6 +154,4 @@ if file:
         st.write(contract)
 
 
-        if st.button("Save as Word"):
-            save_as_word(contract)
-            st.write("Contract saved as Word file. Check your downloads folder.")
+        
