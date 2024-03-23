@@ -7,6 +7,28 @@ import io
 from spire.doc import *
 from spire.doc.common import *
 import random
+import os
+
+def delete_files_in_folder(folder_path):
+    # بررسی وجود فولدر
+    if not os.path.exists(folder_path):
+        print("فولدر موجود نیست.")
+        return
+    
+    # باز کردن فولدر و حذف تمامی فایل‌ها
+    for filename in os.listdir(folder_path):
+        file_path = os.path.join(folder_path, filename)
+        try:
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                delete_files_in_folder(file_path)
+        except Exception as e:
+            print(f"خطا در حذف {file_path}: {e}")
+
+# تابع را فراخوانی کنید با مسیر فولدر مورد نظر:
+delete_files_in_folder('/مسیر/فولدر/')
+
 def download_file(file_path, file_name):
     with open(file_path, "rb") as file:
         data = file.read()
@@ -182,3 +204,5 @@ if selected_option == "Option 2":
             pdf_file_path = os.path.join('./download', file)
             # st.markdown(f'<a href="{pdf_file_path}" download="{file}">Download {file}</a>', unsafe_allow_html=True)
             download_file(pdf_file_path, file)
+if selected_option == "Option 3":
+    delete_files_in_folder('./download')
