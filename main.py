@@ -48,7 +48,8 @@ if selected_option== "Setting":
     with tab1:
      # Create the "contracts" directory if it doesn't exist
         directory = "contracts"
-        os.makedirs(directory, exist_ok=True)
+        if directory not in os.listdir():
+            os.makedirs(directory, exist_ok=True)
     
         # File uploader
         uploaded_file = st.file_uploader("Upload a contract file", type=['html'])
@@ -237,7 +238,7 @@ if selected_option == "Option 1" :
     'termination_date': termination_date,
     'marital_status':marital_status,
     'child_number':child_number,
-    'meniority':"{:,.0f}".format(float(month_seniority)),  ##سنوات ماهانه به دلیل داشتن کلمات مشابه با سنوات به این شکل نوشته شده است تا در ایگذتری به مشکل نخورد
+    'meniority':"{:,.0f}".format(float(meniority)),  ##سنوات ماهانه به دلیل داشتن کلمات مشابه با سنوات به این شکل نوشته شده است تا در ایگذتری به مشکل نخورد
     'eydi':"{:,.0f}".format(float(meniority*2))
 }
             for placeholder, value in replacement_dict.items():
