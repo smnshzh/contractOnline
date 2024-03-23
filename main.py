@@ -6,6 +6,17 @@ from html2docx import html2docx
 import io
 from spire.doc import *
 from spire.doc.common import *
+import random
+def download_file(file_path, file_name):
+    with open(file_path, "rb") as file:
+        data = file.read()
+    st.download_button(
+        label=file_name,
+        data=data,
+        file_name=file_name,
+        mime="application/octet-stream",
+        key = file_path
+    )
 
 st.markdown("""<style>body { direction: rtl; }</style>""", unsafe_allow_html=True)
 # Sidebar title
@@ -169,4 +180,5 @@ if selected_option == "Option 2":
         print(filepath)
         for file in filepath:
             pdf_file_path = os.path.join('./download', file)
-            st.markdown(f'<a href="{pdf_file_path}" download="{file}">Download {file}</a>', unsafe_allow_html=True)
+            # st.markdown(f'<a href="{pdf_file_path}" download="{file}">Download {file}</a>', unsafe_allow_html=True)
+            download_file(pdf_file_path, file)
