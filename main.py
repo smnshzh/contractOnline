@@ -205,4 +205,5 @@ if selected_option == "Option 2":
             # st.markdown(f'<a href="{pdf_file_path}" download="{file}">Download {file}</a>', unsafe_allow_html=True)
             download_file(pdf_file_path, file)
 if selected_option == "Option 3":
-    delete_files_in_folder('./download')
+   if st.button("Clear Folder"):
+        delete_files_in_folder('./download')
