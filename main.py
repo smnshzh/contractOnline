@@ -48,9 +48,27 @@ if selected_option== "Setting":
     with tab1:
      # Create the "contracts" directory if it doesn't exist
         directory = "contracts"
+        files = ""
         if directory not in os.listdir():
             os.makedirs(directory, exist_ok=True)
-    
+        else:
+            # List files in the "contracts" directory
+            files = os.listdir(directory)
+
+            # File selector
+            selected_file = st.selectbox("Select a file to delete", [""] + files)
+
+            if selected_file:
+                if st.button("Delete Selected File"):
+                    file_path = os.path.join(directory, selected_file)
+                    try:
+                        os.remove(file_path)
+                        st.write(f"File '{selected_file}' deleted successfully.")
+                        # Refresh the list of files after deletion
+                        files = os.listdir(directory)
+                    except Exception as e:
+                        st.write(f"Error deleting file '{selected_file}': {e}")
+
         # File uploader
         uploaded_file = st.file_uploader("Upload a contract file", type=['html'])
 
@@ -116,7 +134,10 @@ if selected_option == "Option 1" :
                     'بیمه تکمیلی': 'supplementary_insurance',
                     'بیمه بیکاری': 'unemployment_insurance',
                     'تاریخ ترک کار': 'termination_date',
-                    'تعداد فرزند':'child_number'
+                    'تعداد فرزند':'child_number',
+                    'تاریخ شروع قرارداد':'cstart',
+                    'تاریخ پایان قرارداد' : 'cend'
+
                         }
 
             
@@ -168,6 +189,8 @@ if selected_option == "Option 1" :
             marital_status = str(df_un['وضعیت تاهل'].item())
             child_number = str(df_un['تعداد فرزند'].item())
             meniority = int(monthly_base_salary)/12
+            cstart = str(df_un['تاریخ شروع قرارداد'].item())
+            cend = str(df_un['تاریخ پایان قرارداد'].item())
                         # Path to the HTML file
             contract_dir = './contracts'
             contract_list = os.listdir(contract_dir)
@@ -239,7 +262,9 @@ if selected_option == "Option 1" :
     'marital_status':marital_status,
     'child_number':child_number,
     'meniority':"{:,.0f}".format(float(meniority)),  ##سنوات ماهانه به دلیل داشتن کلمات مشابه با سنوات به این شکل نوشته شده است تا در ایگذتری به مشکل نخورد
-    'eydi':"{:,.0f}".format(float(meniority*2))
+    'eydi':"{:,.0f}".format(float(meniority*2)),
+    'cend' : cend,
+    'cstart' : cstart
 }
             for placeholder, value in replacement_dict.items():
                 
