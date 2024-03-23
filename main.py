@@ -207,3 +207,4 @@ if selected_option == "Option 2":
 if selected_option == "Option 3":
    if st.button("Clear Folder"):
         delete_files_in_folder('./download')
+        st.success("Folder successfully deleted")
