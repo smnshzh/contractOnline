@@ -26,9 +26,6 @@ def delete_files_in_folder(folder_path):
         except Exception as e:
             print(f"خطا در حذف {file_path}: {e}")
 
-# تابع را فراخوانی کنید با مسیر فولدر مورد نظر:
-delete_files_in_folder('/مسیر/فولدر/')
-
 def download_file(file_path, file_name):
     with open(file_path, "rb") as file:
         data = file.read()
@@ -45,26 +42,82 @@ st.markdown("""<style>body { direction: rtl; }</style>""", unsafe_allow_html=Tru
 st.sidebar.header('CM Options')
 
 # Add a radio button to the sidebar
-selected_option = st.sidebar.radio("Select an option", ["Option 1", "Option 2", "Option 3"])
+selected_option = st.sidebar.radio("Select an option", ["Setting","Option 1", "Option 2", "Option 3"])
+if selected_option== "Setting":
+    tab1 , tab2 = st.tabs(["add contract","leave comment"])
+    with tab1:
+     # Create the "contracts" directory if it doesn't exist
+        directory = "contracts"
+        os.makedirs(directory, exist_ok=True)
+    
+        # File uploader
+        uploaded_file = st.file_uploader("Upload a contract file", type=['html'])
+
+        if uploaded_file is not None:
+            if st.button("Upload Contract File"):
+                # Save the uploaded file to the "contracts" directory
+                file_path = os.path.join(directory, uploaded_file.name)
+                with open(file_path, 'wb') as f:
+                    f.write(uploaded_file.getbuffer())
+                
+                st.write(f"File uploaded successfully and saved to: {file_path}")
 if selected_option == "Option 1" :
+    download_file('./sample.xlsx','sample.xlsx')
     st.header("ساخت قرارداد بر اساس کد پرسنلی")
 
-    download_file('./sample.xlsx','sample.xlsx')
-
-    
-
-
     file = st.file_uploader("Upload File", type=["xlsx", "xls"])
-
-
-
-
-
-
+    
     if file:
-        df = pd.read_excel(file)
+        df = pd.read_excel(file, dtype=str)
         selected_person = st.selectbox("Select Person ID", df['شماره پرسنلی'])
         if selected_person:
+
+            column_mapping = {
+                    'وضعیت تاهل':'arital_status',
+                    'مرکز هزینه': 'cost_center',
+                    'شماره پرسنلی': 'employee_id',
+                    'نوع بیمه': 'insurance_type',
+                    'شماره بیمه': 'insurance_number',
+                    'تاریخ استخدام': 'employment_date',
+                    'تاریخ تولد': 'date_of_birth',
+                    'محل تولد': 'place_of_birth',
+                    'نام': 'first_name',
+                    'نام خانوادگی': 'last_name',
+                    'شماره شناسنامه': 'national_id',
+                    'نام پدر': 'father_name',
+                    'کد ملی': 'national_code',
+                    'کد پستی': 'postal_code',
+                    'تلفن': 'telephone',
+                    'تلفن همراه': 'mobile',
+                    'مدرک تحصیلی': 'education_degree',
+                    'رشته تحصیلی': 'field_of_study',
+                    'آدرس': 'address',
+                    'جنسیت': 'gender',
+                    'شرح شغل': 'job_description',
+                    'کد شغل': 'job_code',
+                    'مدت قرارداد(ماه)': 'contract_duration',
+                    'حقوق پایه ماهانه': 'monthly_base_salary',
+                    'حقوق پایه روزانه': 'daily_base_salary',
+                    'حقوق پایه هر ساعت': 'hourly_base_salary',
+                    'حق جذب': 'recruitment_bonus',
+                    'حق مسکن': 'housing_allowance',
+                    'حق اولاد': 'child_allowance',
+                    'بن و خواروبار': 'food_and_weather_allowance',
+                    'بدی آب و هوا': 'weather_disability',
+                    'حق ماموریت': 'mission_allowance',
+                    'پاداش': 'bonus',
+                    'مشمول بیمه': 'insured',
+                    'سهم کارگر': 'worker_share',
+                    'سهم کارفرما': 'employer_share',
+                    'معافیت دو هفتم': 'two_thirds_exemption',
+                    'سنوات': 'seniority',
+                    'حق سرپرستی': 'supervisor_allowance',
+                    'بیمه تکمیلی': 'supplementary_insurance',
+                    'بیمه بیکاری': 'unemployment_insurance',
+                    'تاریخ ترک کار': 'termination_date',
+                    'تعداد فرزند':'child_number'
+                        }
+
             
             st.write(f"Selected person ID: {selected_person}")
             # You can perform further actions based on the selected person ID here
@@ -107,30 +160,90 @@ if selected_option == "Option 1" :
             employer_share = str(df_un['سهم کارفرما'].item())
             two_thirds_exemption = str(df_un['معافیت دو هفتم'].item())
             seniority = str(df_un['سنوات'].item())
-            supervisor_allowance = str(df_un['حق سرپرستی'].item())
+            supervisor_allowance = df_un['حق سرپرستی'].item()
             supplementary_insurance = str(df_un['بیمه تکمیلی'].item())
             unemployment_insurance = str(df_un['بیمه بیکاری'].item())
             termination_date = str(df_un['تاریخ ترک کار'].item())
+            marital_status = str(df_un['وضعیت تاهل'].item())
+            child_number = str(df_un['تعداد فرزند'].item())
+            meniority = int(monthly_base_salary)/12
                         # Path to the HTML file
-            html_file_path = './empolye.html'
+            contract_dir = './contracts'
+            contract_list = os.listdir(contract_dir)
+            select_contract = st.selectbox(label="نوع قرارداد را انتخاب نمایید", options=contract_list)
+
+            html_file_path = None
+            if select_contract:
+                html_file_path = os.path.join(contract_dir, select_contract)
+
+            if html_file_path:
+                # Perform actions with html_file_path
+                # For example, you might want to display the HTML content:
+                st.write(f"Selected HTML file path: {html_file_path}")
+            else:
+                st.write("لطفا یک قرارداد را انتخاب نمایید.")
 
             # Read the contents of the HTML file
             with open(html_file_path, 'r', encoding='utf-8') as file:
                 html_content = file.read()
             # Replace placeholders in the HTML content
-        
-            html_content = html_content.replace("first_name", first_name)
-            html_content = html_content.replace("national_code", national_code)
-            html_content = html_content.replace("father_name", father_name)
-            html_content = html_content.replace("address",address)
-            html_content = html_content.replace("mobile", mobile)
-            html_content = html_content.replace("last_name", last_name)
-            html_content = html_content.replace("hourly_base_salary", "{:,.0f}".format(float(hourly_base_salary)))
-            html_content = html_content.replace("housing_allowance", "{:,.0f}".format(float(housing_allowance)))
-            html_content = html_content.replace("child_allowance", "{:,.0f}".format(float(child_allowance)))
-            html_content = html_content.replace("seniority", "{:,.0f}".format(float(seniority)))
-            html_content = html_content.replace("food_and_weather_allowance", "{:,.0f}".format(float(food_and_weather_allowance)))
+            if gender == "مرد":
+                gender = "آقای"
+            elif gender == "زن":
+                gender = "خانم"
 
+            replacement_dict = {
+    'cost_center': cost_center,
+    'employee_id': employee_id,
+    'insurance_type': insurance_type,
+    'insurance_number': insurance_number,
+    'employment_date': employment_date,
+    'date_of_birth': date_of_birth,
+    'place_of_birth': place_of_birth,
+    'first_name': first_name,
+    'last_name': last_name,
+    'employer_name': employer_name,
+    'national_id': national_id,
+    'father_name': father_name,
+    'national_code': national_code,
+    'postal_code': postal_code,
+    'telephone': telephone,
+    'mobile': mobile,
+    'education_degree': education_degree,
+    'field_of_study': field_of_study,
+    'address': address,
+    'gender': gender,
+    'job_description': job_description,
+    'job_code': job_code,
+    'contract_duration': contract_duration,
+    'monthly_base_salary':"{:,.0f}".format(float(monthly_base_salary)),
+    'daily_base_salary': "{:,.0f}".format(float(daily_base_salary)),
+    'hourly_base_salary': "{:,.0f}".format(float(hourly_base_salary)),
+    'recruitment_bonus': "{:,.0f}".format(float(recruitment_bonus)),
+    'housing_allowance': "{:,.0f}".format(float(housing_allowance)),
+    'child_allowance': "{:,.0f}".format(float(child_allowance)),
+    'food_and_weather_allowance': "{:,.0f}".format(float(food_and_weather_allowance)),
+    'weather_disability': "{:,.0f}".format(float(weather_disability)),
+    'mission_allowance': "{:,.0f}".format(float(mission_allowance)),
+    'bonus': "{:,.0f}".format(float(bonus)),
+    'insured': insured,
+    'worker_share': worker_share,
+    'employer_share': employer_share,
+    'two_thirds_exemption': two_thirds_exemption,
+    'seniority': seniority,
+    'supervisor_allowance': supervisor_allowance,
+    'supplementary_insurance': supplementary_insurance,
+    'unemployment_insurance': unemployment_insurance,
+    'termination_date': termination_date,
+    'marital_status':marital_status,
+    'child_number':child_number,
+    'meniority':"{:,.0f}".format(float(month_seniority)),  ##سنوات ماهانه به دلیل داشتن کلمات مشابه با سنوات به این شکل نوشته شده است تا در ایگذتری به مشکل نخورد
+    'eydi':"{:,.0f}".format(float(meniority*2))
+}
+            for placeholder, value in replacement_dict.items():
+                
+                html_content = html_content.replace(placeholder, value)
+            
         
             # Display the HTML content
             # st.components.v1.html(html_content, width=1200, height=5000) 
