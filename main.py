@@ -49,29 +49,9 @@ selected_option = st.sidebar.radio("Select an option", ["Option 1", "Option 2", 
 if selected_option == "Option 1" :
     st.header("ساخت قرارداد بر اساس کد پرسنلی")
 
-    sample = pd.read_csv('person.csv')
+    download_file('./sample.xlsx','sample.xlsx')
 
-    def convert_df(df):
-
-        # IMPORTANT: Cache the conversion to prevent computation on every rerun
-
-        return df.to_csv().encode('utf-8')
-
-
-    csv = convert_df(sample)
-    #adding a download button to download csv file
-
-    st.download_button( 
-
-        label="Download data as CSV",
-
-        data=csv,
-
-        file_name='sample_df.csv',
-
-        mime='text/csv',
-
-    )
+    
 
 
     file = st.file_uploader("Upload File", type=["xlsx", "xls"])
