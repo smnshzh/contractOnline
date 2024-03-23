@@ -9,90 +9,8 @@ from spire.doc.common import *
 import random
 import os
 
-def delete_files_in_folder(folder_path):
-    # بررسی وجود فولدر
-    if not os.path.exists(folder_path):
-        print("فولدر موجود نیست.")
-        return
-    
-    # باز کردن فولدر و حذف تمامی فایل‌ها
-    for filename in os.listdir(folder_path):
-        file_path = os.path.join(folder_path, filename)
-        try:
-            if os.path.isfile(file_path) or os.path.islink(file_path):
-                os.unlink(file_path)
-            elif os.path.isdir(file_path):
-                delete_files_in_folder(file_path)
-        except Exception as e:
-            print(f"خطا در حذف {file_path}: {e}")
-
-def download_file(file_path, file_name):
-    with open(file_path, "rb") as file:
-        data = file.read()
-    st.download_button(
-        label=file_name,
-        data=data,
-        file_name=file_name,
-        mime="application/octet-stream",
-        key = file_path
-    )
-
-st.markdown("""<style>body { direction: rtl; }</style>""", unsafe_allow_html=True)
-# Sidebar title
-st.sidebar.header('CM Options')
-
-# Add a radio button to the sidebar
-selected_option = st.sidebar.radio("Select an option", ["Setting","Option 1", "Option 2", "Option 3"])
-if selected_option== "Setting":
-    tab1 , tab2 = st.tabs(["add contract","leave comment"])
-    with tab1:
-     # Create the "contracts" directory if it doesn't exist
-        directory = "contracts"
-        files = ""
-        if directory not in os.listdir():
-            os.makedirs(directory, exist_ok=True)
-        else:
-            # List files in the "contracts" directory
-            files = os.listdir(directory)
-
-            # File selector
-            selected_file = st.selectbox("Select a file to delete", [""] + files)
-
-            if selected_file:
-                if st.button("Delete Selected File"):
-                    file_path = os.path.join(directory, selected_file)
-                    try:
-                        os.remove(file_path)
-                        st.write(f"File '{selected_file}' deleted successfully.")
-                        # Refresh the list of files after deletion
-                        files = os.listdir(directory)
-                    except Exception as e:
-                        st.write(f"Error deleting file '{selected_file}': {e}")
-
-        # File uploader
-        uploaded_file = st.file_uploader("Upload a contract file", type=['html'])
-
-        if uploaded_file is not None:
-            if st.button("Upload Contract File"):
-                # Save the uploaded file to the "contracts" directory
-                file_path = os.path.join(directory, uploaded_file.name)
-                with open(file_path, 'wb') as f:
-                    f.write(uploaded_file.getbuffer())
-                
-                st.write(f"File uploaded successfully and saved to: {file_path}")
-if selected_option == "Option 1" :
-    download_file('./sample.xlsx','sample.xlsx')
-    st.header("ساخت قرارداد بر اساس کد پرسنلی")
-
-    file = st.file_uploader("Upload File", type=["xlsx", "xls"])
-    
-    if file:
-        df = pd.read_excel(file, dtype=str)
-        selected_person = st.selectbox("Select Person ID", df['شماره پرسنلی'])
-        if selected_person:
-
-            column_mapping = {
-                    'وضعیت تاهل':'arital_status',
+column_mapping = {
+                    'وضعیت تاهل':'marital_status',
                     'مرکز هزینه': 'cost_center',
                     'شماره پرسنلی': 'employee_id',
                     'نوع بیمه': 'insurance_type',
@@ -140,6 +58,101 @@ if selected_option == "Option 1" :
 
                         }
 
+
+
+
+
+
+def delete_files_in_folder(folder_path):
+    # بررسی وجود فولدر
+    if not os.path.exists(folder_path):
+        print("فولدر موجود نیست.")
+        return
+    
+    # باز کردن فولدر و حذف تمامی فایل‌ها
+    for filename in os.listdir(folder_path):
+        file_path = os.path.join(folder_path, filename)
+        try:
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                delete_files_in_folder(file_path)
+        except Exception as e:
+            print(f"خطا در حذف {file_path}: {e}")
+
+def download_file(file_path, file_name):
+    with open(file_path, "rb") as file:
+        data = file.read()
+    st.download_button(
+        label=file_name,
+        data=data,
+        file_name=file_name,
+        mime="application/octet-stream",
+        key = file_path
+    )
+
+st.markdown("""<style>body { direction: rtl; }</style>""", unsafe_allow_html=True)
+# Sidebar title
+st.sidebar.header('CM Options')
+
+# Add a radio button to the sidebar
+selected_option = st.sidebar.radio("Select an option", ["Setting","Option 1", "Option 2", "Option 3"])
+if selected_option== "Setting":
+    tab1 , tab2 = st.tabs(["Add contract","Model"])
+    with tab1:
+     # Create the "contracts" directory if it doesn't exist
+        directory = "contracts"
+        files = ""
+        if directory not in os.listdir():
+            os.makedirs(directory, exist_ok=True)
+        else:
+            # List files in the "contracts" directory
+            files = os.listdir(directory)
+
+            # File selector
+            selected_file = st.selectbox("Select a file to delete", [""] + files)
+
+            if selected_file:
+                if st.button("Delete Selected File"):
+                    file_path = os.path.join(directory, selected_file)
+                    try:
+                        os.remove(file_path)
+                        st.write(f"File '{selected_file}' deleted successfully.")
+                        # Refresh the list of files after deletion
+                        files = os.listdir(directory)
+                    except Exception as e:
+                        st.write(f"Error deleting file '{selected_file}': {e}")
+
+        # File uploader
+        uploaded_file = st.file_uploader("Upload a contract file", type=['html'])
+
+        if uploaded_file is not None:
+            if st.button("Upload Contract File"):
+                # Save the uploaded file to the "contracts" directory
+                file_path = os.path.join(directory, uploaded_file.name)
+                with open(file_path, 'wb') as f:
+                    f.write(uploaded_file.getbuffer())
+                
+                st.write(f"File uploaded successfully and saved to: {file_path}")
+    with tab2:
+        col1 ,col2 = st.columns(2)
+        with col1:
+            st.dataframe(pd.DataFrame({"excel Header":column_mapping.keys(),"html tag":column_mapping.values()}))
+        with col2:
+            st.write("""اطلاعات پرسنل مطابق سر ستون ها فایل نمونه می باشد و در فایل html
+                       نمونه قرارداد اطلاعات به صورت نام
+                     لاتین وارد میشود.
+                     """)    
+if selected_option == "Option 1" :
+    download_file('./sample.xlsx','sample.xlsx')
+    st.header("ساخت قرارداد بر اساس کد پرسنلی")
+
+    file = st.file_uploader("Upload File", type=["xlsx", "xls"])
+    
+    if file:
+        df = pd.read_excel(file, dtype=str)
+        selected_person = st.selectbox("Select Person ID", df['شماره پرسنلی'])
+        if selected_person:
             
             st.write(f"Selected person ID: {selected_person}")
             # You can perform further actions based on the selected person ID here
