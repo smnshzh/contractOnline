@@ -1,3 +1,4 @@
+<<<<<<< HEAD
 [admin]
 username = "admin"
 password = "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3"
@@ -15,3 +16,22 @@ username = "info"
 password = "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3"
 email = "info@duethchshnell.com"
 role = "User"
+=======
+[admin]
+username = "admin"
+password = "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3"
+email = "bbb"
+role = "Admin"
+
+[reza]
+username = "reza"
+password = "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3"
+email = "info@duethchshnell.com"
+role = "User"
+
+[info]
+username = "info"
+password = "a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3"
+email = "info@duethchshnell.com"
+role = "User"
+>>>>>>> 1565e4acbeceb16791e0d78c02eca4b91dfc9795
