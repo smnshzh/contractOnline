@@ -345,5 +345,5 @@ def main ():
                     st.success("Folder successfully deleted")
 
 if __name__ == "__main__":
-
+        main()
 
