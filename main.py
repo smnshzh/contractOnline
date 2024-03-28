@@ -145,7 +145,7 @@ def main ():
                             نمونه قرارداد اطلاعات به صورت نام
                             لاتین وارد میشود.
                             """)  
-                    st.text_area()  
+                    st.text_area(label = "Contract data")  
         if selected_option == "Option 1" :
             download_file('./sample.xlsx','sample.xlsx')
             st.header("ساخت قرارداد بر اساس کد پرسنلی")

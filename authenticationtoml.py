@@ -11,14 +11,11 @@ def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
 def load_existing_users():
     try:
-        print("existing user")
-        print(toml.load('user.toml'))
         with open("users.toml", "r") as toml_file:
             existing_users = toml.load(toml_file)
-            print(existing_users)
             return existing_users
-    except e:
-        return e  # Return an empty dictionary if the file doesn't exist
+    except FileNotFoundError:
+        return {}  # Return an empty dictionary if the file doesn't exist
 # Function to save user credentials to a TOML file
 def save_credentials(username, password, email, role):
     try:
@@ -64,27 +61,24 @@ def validate_credentials(username, password):
             raise ValueError("Username and password must be provided")
 
         hashed_password = hash_password(password)
-        
+
         # Load existing users from TOML file
         existing_users = load_existing_users()
-        print(existing_users)
+
         # Check if the provided username and hashed password match any user in the list
-        if username in existing_users.keys() :
-            if existing_users[username]["password"] == hashed_password:
-                logging.info("User credentials validated successfully.")
-                return True, existing_users[username]["role"]  # Return True and the user's role
+        if username in existing_users and existing_users[username]["password"] == hashed_password:
+            logging.info("User credentials validated successfully.")
+            return True, existing_users[username]["role"]  # Return True and the user's role
         else:
             logging.info("User credentials validation failed.")
             return False, None  # Return False and None for role
     except Exception as e:
-        print ("validate_credentials")
-        
+        logging.error(f"Error: {str(e)}")
         return False, None  # Return False and None for role in case of an error
 
 # Function to check and authenticate user
 def check_password():
     cookie = stx.CookieManager(key="MainCookie")
-    st.write(cookie.get_all())
     if not cookie.get(cookie="autherized"):
         # First run or previous login attempt failed, show inputs for username + password.
         username = st.text_input("Username", key="login_username")
@@ -98,7 +92,7 @@ def check_password():
                 cookie.set("user_role", user_role, key="set_user_role")
                 print("Logged in")
                 st.success("😀 Login successful.")
-                return True
+                
             else:
                 st.error("😕 User not known or password incorrect")
     else:
