@@ -13,6 +13,7 @@ def load_existing_users():
     try:
         with open("users.toml", "r") as toml_file:
             existing_users = toml.load(toml_file)
+            print(existing_users)
             return existing_users
     except FileNotFoundError:
         return {}  # Return an empty dictionary if the file doesn't exist
