@@ -11,10 +11,13 @@ def hash_password(password):
     return hashlib.sha256(password.encode()).hexdigest()
 def load_existing_users():
     try:
+       
         with open("users.toml", "r") as toml_file:
             existing_users = toml.load(toml_file)
+            print(existing_users)
             return existing_users
     except FileNotFoundError:
+        print("No users file found, creating new")
         return {}  # Return an empty dictionary if the file doesn't exist
 # Function to save user credentials to a TOML file
 def save_credentials(username, password, email, role):
@@ -32,7 +35,7 @@ def save_credentials(username, password, email, role):
                 existing_users = toml.load(toml_file)
         except FileNotFoundError:
             existing_users = {}
-        if username not in existing_users.keys():
+        if username not in existing_users:
             # Update existing user data with the new user
             existing_users[username] = new_user
             
@@ -61,19 +64,21 @@ def validate_credentials(username, password):
             raise ValueError("Username and password must be provided")
 
         hashed_password = hash_password(password)
-
+        
         # Load existing users from TOML file
         existing_users = load_existing_users()
-
+        print(existing_users)
         # Check if the provided username and hashed password match any user in the list
-        if username in existing_users and existing_users[username]["password"] == hashed_password:
-            logging.info("User credentials validated successfully.")
-            return True, existing_users[username]["role"]  # Return True and the user's role
+        if username in existing_users :
+            if existing_users[username]["password"] == hashed_password:
+                logging.info("User credentials validated successfully.")
+                return True, existing_users[username]["role"]  # Return True and the user's role
         else:
             logging.info("User credentials validation failed.")
             return False, None  # Return False and None for role
     except Exception as e:
-        logging.error(f"Error: {str(e)}")
+        print ("validate_credentials")
+        
         return False, None  # Return False and None for role in case of an error
 
 # Function to check and authenticate user
@@ -92,7 +97,7 @@ def check_password():
                 cookie.set("user_role", user_role, key="set_user_role")
                 print("Logged in")
                 st.success("😀 Login successful.")
-                
+                return True
             else:
                 st.error("😕 User not known or password incorrect")
     else:

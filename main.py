@@ -8,89 +8,91 @@ from spire.doc import *
 from spire.doc.common import *
 import os
 from authenticationtoml import *
-import extra_streamlit_components as stx
+# import extra_streamlit_components as stx
+
 def main ():
-    st.markdown("""<style>body { direction: rtl; }</style>""", unsafe_allow_html=True)
-    column_mapping = {        
-                                'وضعیت تاهل':'marital_status',
-                                'مرکز هزینه': 'cost_center',
-                                'شماره پرسنلی': 'employee_id',
-                                'نوع بیمه': 'insurance_type',
-                                'شماره بیمه': 'insurance_number',
-                                'تاریخ استخدام': 'employment_date',
-                                'تاریخ تولد': 'date_of_birth',
-                                'محل تولد': 'place_of_birth',
-                                'نام': 'first_name',
-                                'نام خانوادگی': 'last_name',
-                                'شماره شناسنامه': 'national_id',
-                                'نام پدر': 'father_name',
-                                'کد ملی': 'national_code',
-                                'کد پستی': 'postal_code',
-                                'تلفن': 'telephone',
-                                'تلفن همراه': 'mobile',
-                                'مدرک تحصیلی': 'education_degree',
-                                'رشته تحصیلی': 'field_of_study',
-                                'آدرس': 'address',
-                                'جنسیت': 'gender',
-                                'شرح شغل': 'job_description',
-                                'کد شغل': 'job_code',
-                                'مدت قرارداد(ماه)': 'contract_duration',
-                                'حقوق پایه ماهانه': 'monthly_base_salary',
-                                'حقوق پایه روزانه': 'daily_base_salary',
-                                'حقوق پایه هر ساعت': 'hourly_base_salary',
-                                'حق جذب': 'recruitment_bonus',
-                                'حق مسکن': 'housing_allowance',
-                                'حق اولاد': 'child_allowance',
-                                'بن و خواروبار': 'food_and_weather_allowance',
-                                'بدی آب و هوا': 'weather_disability',
-                                'حق ماموریت': 'mission_allowance',
-                                'پاداش': 'bonus',
-                                'مشمول بیمه': 'insured',
-                                'سهم کارگر': 'worker_share',
-                                'سهم کارفرما': 'employer_share',
-                                'معافیت دو هفتم': 'two_thirds_exemption',
-                                'سنوات': 'seniority',
-                                'حق سرپرستی': 'supervisor_allowance',
-                                'بیمه تکمیلی': 'supplementary_insurance',
-                                'بیمه بیکاری': 'unemployment_insurance',
-                                'تاریخ ترک کار': 'termination_date',
-                                'تعداد فرزند':'child_number',
-                                'تاریخ شروع قرارداد':'cstart',
-                                'تاریخ پایان قرارداد' : 'cend'
+        st.markdown("""<style>body { direction: rtl; }</style>""", unsafe_allow_html=True)
+        column_mapping = {        
+                                    'وضعیت تاهل':'marital_status',
+                                    'مرکز هزینه': 'cost_center',
+                                    'شماره پرسنلی': 'employee_id',
+                                    'نوع بیمه': 'insurance_type',
+                                    'شماره بیمه': 'insurance_number',
+                                    'تاریخ استخدام': 'employment_date',
+                                    'تاریخ تولد': 'date_of_birth',
+                                    'محل تولد': 'place_of_birth',
+                                    'نام': 'first_name',
+                                    'نام خانوادگی': 'last_name',
+                                    'شماره شناسنامه': 'national_id',
+                                    'نام پدر': 'father_name',
+                                    'کد ملی': 'national_code',
+                                    'کد پستی': 'postal_code',
+                                    'تلفن': 'telephone',
+                                    'تلفن همراه': 'mobile',
+                                    'مدرک تحصیلی': 'education_degree',
+                                    'رشته تحصیلی': 'field_of_study',
+                                    'آدرس': 'address',
+                                    'جنسیت': 'gender',
+                                    'شرح شغل': 'job_description',
+                                    'کد شغل': 'job_code',
+                                    'مدت قرارداد(ماه)': 'contract_duration',
+                                    'حقوق پایه ماهانه': 'monthly_base_salary',
+                                    'حقوق پایه روزانه': 'daily_base_salary',
+                                    'حقوق پایه هر ساعت': 'hourly_base_salary',
+                                    'حق جذب': 'recruitment_bonus',
+                                    'حق مسکن': 'housing_allowance',
+                                    'حق اولاد': 'child_allowance',
+                                    'بن و خواروبار': 'food_and_weather_allowance',
+                                    'بدی آب و هوا': 'weather_disability',
+                                    'حق ماموریت': 'mission_allowance',
+                                    'پاداش': 'bonus',
+                                    'مشمول بیمه': 'insured',
+                                    'سهم کارگر': 'worker_share',
+                                    'سهم کارفرما': 'employer_share',
+                                    'معافیت دو هفتم': 'two_thirds_exemption',
+                                    'سنوات': 'seniority',
+                                    'حق سرپرستی': 'supervisor_allowance',
+                                    'بیمه تکمیلی': 'supplementary_insurance',
+                                    'بیمه بیکاری': 'unemployment_insurance',
+                                    'تاریخ ترک کار': 'termination_date',
+                                    'تعداد فرزند':'child_number',
+                                    'تاریخ شروع قرارداد':'cstart',
+                                    'تاریخ پایان قرارداد' : 'cend'
 
-                                    }
+                                        }
 
 
-    def delete_files_in_folder(folder_path):        
-                # بررسی وجود فولدر
-                if not os.path.exists(folder_path):
-                    print("فولدر موجود نیست.")
-                    return
-                
-                # باز کردن فولدر و حذف تمامی فایل‌ها
-                for filename in os.listdir(folder_path):
-                    file_path = os.path.join(folder_path, filename)
-                    try:
-                        if os.path.isfile(file_path) or os.path.islink(file_path):
-                            os.unlink(file_path)
-                        elif os.path.isdir(file_path):
-                            delete_files_in_folder(file_path)
-                    except Exception as e:
-                        print(f"خطا در حذف {file_path}: {e}")
+        def delete_files_in_folder(folder_path):        
+                    # بررسی وجود فولدر
+                    if not os.path.exists(folder_path):
+                        print("فولدر موجود نیست.")
+                        return
+                    
+                    # باز کردن فولدر و حذف تمامی فایل‌ها
+                    for filename in os.listdir(folder_path):
+                        file_path = os.path.join(folder_path, filename)
+                        try:
+                            if os.path.isfile(file_path) or os.path.islink(file_path):
+                                os.unlink(file_path)
+                            elif os.path.isdir(file_path):
+                                delete_files_in_folder(file_path)
+                        except Exception as e:
+                            print(f"خطا در حذف {file_path}: {e}")
 
-    def download_file(file_path, file_name):    
-                with open(file_path, "rb") as file:
-                    data = file.read()
-                st.download_button(
-                    label=file_name,
-                    data=data,
-                    file_name=file_name,
-                    mime="application/octet-stream",
-                    key = file_path
-                )    
+        def download_file(file_path, file_name):    
+                    with open(file_path, "rb") as file:
+                        data = file.read()
+                    st.download_button(
+                        label=file_name,
+                        data=data,
+                        file_name=file_name,
+                        mime="application/octet-stream",
+                        key = file_path
+                    )    
 
-    
-    if check_password():
+        
+    # if check_password():
+        
         # Add a radio button to the sidebar
         selected_option = st.sidebar.radio("Select an option", ["Setting","Option 1", "Option 2", "Option 3"])
         
@@ -147,6 +149,7 @@ def main ():
                             """)  
                     st.text_area(label = "Contract data")  
         if selected_option == "Option 1" :
+            
             download_file('./sample.xlsx','sample.xlsx')
             st.header("ساخت قرارداد بر اساس کد پرسنلی")
 
