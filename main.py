@@ -346,10 +346,10 @@ def main ():
             if st.button("Clear Folder"):
                     delete_files_in_folder('./download')
                     st.success("Folder successfully deleted")
-                    video_link = st.text_input('Enter the video link')
-                    # Display the video
-                    if video_link:
-                        st.video(video_link)
+            video_link = st.text_input('Enter the video link')
+         # Display the video
+            if video_link:
+                st.video(video_link)
                     
 
 if __name__ == "__main__":
