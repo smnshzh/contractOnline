@@ -349,7 +349,7 @@ def main ():
                     video_link = st.text_input('Enter the video link')
                     # Display the video
                     if video_link:
-                    st.video(video_link)
+                        st.video(video_link)
                     
 
 if __name__ == "__main__":
