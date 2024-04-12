@@ -349,7 +349,14 @@ def main ():
             video_link = st.text_input('Enter the video link')
          # Display the video
             if video_link:
-                st.video(video_link)
+                
+                    if st.button('Download Video'):
+                        video_response = requests.get(video_link)
+                        if video_response.status_code == 200:
+                            video_bytes = BytesIO(video_response.content)
+                            st.video(video_bytes)
+                        else:
+                            st.error('Failed to download the video. Please check the link and try again.')
                     
 
 if __name__ == "__main__":
