@@ -7,6 +7,8 @@ import io
 from spire.doc import *
 from spire.doc.common import *
 import os
+import requests
+from io import BytesIO
 # from authenticationtoml import *
 # import extra_streamlit_components as stx
 
